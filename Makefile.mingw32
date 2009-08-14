@@ -1,0 +1,56 @@
+INC_CFLAGS = $(CFLAGS) $(shell pkg-config --cflags glib-2.0 gstreamer-avsynth-0.10)
+LIB_LDFLAGS = $(LDFLAGS) $(shell pkg-config --libs glib-2.0 gstreamer-avsynth-0.10)
+CC = gcc
+SPEC_CFLAGS = $(INC_CFLAGS) -I. -Wall -Winline -march=pentium2
+ifdef DEBUG
+DEBUG_CFLAGS = $(SPEC_CFLAGS) -O0 -g
+else
+DEBUG_CFLAGS = $(SPEC_CFLAGS) -O3
+endif
+LOCAL_CFLAGS = $(DEBUG_CFLAGS) -fno-common -Wno-format -mms-bitfields
+SONAME = libgstavsynth-yadif.dll
+SOURCE_FILES = yadif.c
+OBJECT_FILES = $(patsubst %.c,%.o,$(SOURCE_FILES))
+
+ifeq ($(OS),Windows_NT)
+	ifeq ($(MSYSTEM),MINGW32)
+		ENV = mingw-msys
+	else
+		ENV = mingw-cmd
+	endif
+else
+	ENV = gnu
+endif
+
+all: plugin
+
+clean:
+ifeq ($(ENV),mingw-cmd)
+	cmd /C del *.o *.dll
+else
+	rm *.o *.dll
+endif
+
+%.o: %.c
+	$(CC) -DHAVE_CONFIG_H  $(LOCAL_CFLAGS) -o $@ -c $< 
+
+plugin: $(OBJECT_FILES)
+	$(CC) -shared -Wl,-soname,$(SONAME) -o $(SONAME) $(OBJECT_FILES) $(LIB_LDFLAGS)
+
+install: plugin
+ifndef PREFIX
+ifeq ($(ENV),mingw-cmd)
+	@echo Please use PREFIX=drive:\installation\directory to specify installation path
+else
+	@echo Please use PREFIX=/installation/directory to specify installation path
+endif
+else
+ifeq ($(ENV),mingw-cmd)
+	@echo Installing as $(PREFIX)\$(SONAME)
+	cmd /C if NOT EXIST $(PREFIX) mkdir $(PREFIX)
+	cmd /C copy /Y $(SONAME) $(PREFIX)\$(SONAME)
+else
+	@echo Installing as $(PREFIX)/$(SONAME)
+	install -D $(SONAME) $(PREFIX)/$(SONAME)
+endif
+endif
