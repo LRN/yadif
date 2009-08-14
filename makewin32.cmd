@@ -31,11 +31,11 @@ set MAKE_DIR=c:\gnu
 set MINGW_DIR=c:\mingw
 
 set PKG_CONFIG_PATH=%GTK_DIR%\lib\pkgconfig;%GST_DIR%\lib\pkgconfig
-set CFLAGS=-I%GST_DIR%\include\gstreamer-0.10
+set CFLAGS=-Wall
 if defined MODIFIED_PATH goto callmake
 set PATH=%MAKE_DIR%\bin;%MINGW_DIR%\bin;%PATH%
 set MODIFIED_PATH=1
 
 :callmake
 @echo on
-mingw32-make -f Makefile.mingw32 -Wall %*
+mingw32-make -f Makefile.mingw32 %*
