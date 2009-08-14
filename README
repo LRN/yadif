@@ -1,0 +1,22 @@
+This is a GstAVSynth port of the Yadif AviSynth filter.
+It is based on original AviSynth Yadif v1.4.
+
+GstAVSynth is available here:
+http://github.com/LRN/gst-avsynth
+
+Original Yadif for AviSynth is available here:
+http://avisynth.org.ru/yadif/yadif.html
+
+To use Yadif (after you compile it) you'll need GStreamer itself and
+GstAVSynth GStreamer plugin.
+
+Yadif should (in theory) work on all platforms where GStreamer works. Yadif
+is tested and works on Windows.
+
+To build Yadif, use GNU Make with one of the makefiles:
+    make -f Makefile.something
+
+For Windows builds there is a special batch file and a special makefile.
+
+Yadif is distributed under any version of GNU General Public License
+(see Copying for details).
