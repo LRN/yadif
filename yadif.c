@@ -136,7 +136,6 @@ yadif_construct(gpointer p, AVS_ScriptEnvironment *e, AVS_Value args)
   e->avs_clip_release(next);
 
   yada->env = e;
-  next = yada->env->avs_val_take_clip(AVS_ARRAY_ELT(args, 0));
   yada->vi = yada->parent.vi;
 
   if (AVS_IS_PLANAR(&yada->vi) || AVS_IS_YUY2(&yada->vi)) {
